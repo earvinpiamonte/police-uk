@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# rewrite .js, .css with version
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+)\.\w+(\.(?:js|css))$ $1$2
+
+# force http www if not local
+RewriteCond %{HTTP_HOST} !=localhost
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+<IfModule mod_headers.c>
+	# set expiration
+	ExpiresActive On
+	ExpiresByType image/jpg "access 1 month"
+	ExpiresByType image/jpeg "access 1 month"
+	ExpiresByType text/css "access 1 month"
+	ExpiresByType text/x-javascript "access 1 month"
+	ExpiresDefault "access 1 month"
+
+	# can handle compressed versions of the content
+	<FilesMatch ".(js|css|html|php)$">
+		Header append Vary: Accept-Encoding
+	 </FilesMatch>
+</IfModule>
