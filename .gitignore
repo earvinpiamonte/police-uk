@@ -1,5 +1,4 @@
 assets/src/node_modules/
-assets/dist/
 user_guide
 
 application/session_dir/*
